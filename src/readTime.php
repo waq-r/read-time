@@ -35,16 +35,17 @@ class ReadTime
     public $abbreviate;
 
     /**
-     * Number of minutes required to read text(rounded).
+     * Number of minutes required to read text(rounded, minimum 1).
      * @var int
      */
     public static $minutes;
 
     /**
-     * The number of seconds required to read on top of minutes.
-     * @var int
+     * Number of minutes + seconds required to read the text.
+     * Minutes are not rounded and there's no minimum value.
+     * @var array
      */
-    public static $seconds;
+    public static $time;
 
     /**
      * English words with their translations. Default English language values.
@@ -92,25 +93,24 @@ class ReadTime
      * @param string $text The text content.
      * @return int value of the number of the minutes required to read text.
      */
-    public static function minutes(string $text): int
+    public static function time(string $text): array
     {
-        //self::$minutes = max(round(self::wordCount($text) / self::$wordsPerMinute), 1);
-        self::$minutes = self::wordCount($text) / self::$wordsPerMinute;
-        return self::$minutes;
+        $time                  = self::wordCount($text) / self::$wordsPerMinute;
+        self::$time['minutes'] = (int) $time;
+        self::$time['seconds'] = ($time * 60) % 60;
+        return self::$time;
 
     }
 
     /**
-     * Calculate and set class minute and seconds properties.
+     * Calculate time in minute, minimum 1 and rounded.
      *
      * @return void
      */
 
-    private static function calculateTime(): void
+    protected function roundMinutes(): void
     {
-        $seconds       = (self::wordCount() / self::$wordsPerMinute) * 60;
-        self::$minutes = (int) max(round($seconds / 60), 1);
-        self::$seconds = (int) $seconds % (self::$minutes * 60);
+        self::$minutes = (int) max(round(self::wordCount(self::$text) / self::$wordsPerMinute), 1);
 
     }
     /**
@@ -123,7 +123,7 @@ class ReadTime
     public static function minRead(string $text)
     {
         self::$text = $text;
-        self::calculateTime();
+        self::roundMinutes();
         return self::$minutes . ' min read';
     }
 
@@ -155,7 +155,7 @@ class ReadTime
 
     public function getTime()
     {
-        self::calculateTime();
+        self::roundMinutes();
 
         if ($this->abbreviate) {
             //return x min read
@@ -177,7 +177,7 @@ class ReadTime
     {
         return [
             'minutes'        => self::$minutes,
-            'seconds'        => self::$seconds,
+            'time'           => self::time(self::$text),
             'wordCount'      => self::$wordCount,
             'translation'    => $this->translation,
             'abbreviate'     => $this->abbreviate,

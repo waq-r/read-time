@@ -26,14 +26,15 @@ final class ReadTimeTest extends TestCase
         $this->assertSame(440, ReadTime::wordCount());
         $this->assertSame('2 min read', ReadTime::minRead($text));
         $this->assertSame(2, ReadTime::$minutes);
-        $this->assertSame(12, ReadTime::$seconds);
+
+        $this->assertEquals(['minutes' => 2, 'seconds' => 12], ReadTime::time($text));
 
     }
     public function testGetArrayJSON(): void
     {
         $expected = [
             'minutes'        => 2,
-            'seconds'        => 12,
+            'time'           => ['minutes' => 2, 'seconds' => 12],
             'wordCount'      => 440,
             'translation'    => $this->translation,
             'abbreviate'     => true,
