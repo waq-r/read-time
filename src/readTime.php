@@ -43,13 +43,15 @@ class ReadTime
     /**
      * Number of minutes + seconds required to read the text.
      * Minutes are not rounded and there's no minimum value.
-     * @var array
+     * @var array<int>
      */
     public static $time;
 
     /**
      * English words with their translations. Default English language values.
-     * @var array
+     * @var array<string>
+     * $translation['minute'] int value of number of minute
+     * $translation['seconds'] int value of number of seconds
      */
     public $translation = [
         'min'     => 'min',
@@ -64,7 +66,10 @@ class ReadTime
      */
     public $rtl = false;
 
-    public function __construct($text, $translation = null, $abbreviate = true, $rtl = false, $wordsPerMinute = 200)
+    /**
+     * @param array<string> $translation
+     */
+    public function __construct(string $text, array $translation = null, bool $abbreviate = true, bool $rtl = false, int $wordsPerMinute = 200)
     {
         self::$text = $text;
         if (isset($translation)) {
@@ -78,24 +83,24 @@ class ReadTime
     /**
      * Count the number of words in given text content.
      *
-     * @param string $text The text content.
      * @return int value of number of words in $text.
      */
-    public static function wordCount(): int
+    protected static function wordCount(): int
     {
         $text            = strip_tags(self::$text);
-        self::$wordCount = preg_match_all('/\s+/', $text, $matches);
+        self::$wordCount = (int) preg_match_all('/\s+/', $text, $matches);
         return self::$wordCount;
     }
     /**
      * Calculate minutes to read the given text content.
      *
      * @param string $text The text content.
-     * @return int value of the number of the minutes required to read text.
+     * @return array<int> of the number of the minutes and seconds required to read the text.
      */
     public static function time(string $text): array
     {
-        $time                  = self::wordCount($text) / self::$wordsPerMinute;
+        self::$text            = $text;
+        $time                  = self::wordCount() / self::$wordsPerMinute;
         self::$time['minutes'] = (int) $time;
         self::$time['seconds'] = ($time * 60) % 60;
         return self::$time;
@@ -108,9 +113,9 @@ class ReadTime
      * @return void
      */
 
-    protected function roundMinutes(): void
+    protected static function roundMinutes(): void
     {
-        self::$minutes = (int) max(round(self::wordCount(self::$text) / self::$wordsPerMinute), 1);
+        self::$minutes = (int) max(round(self::wordCount() / self::$wordsPerMinute), 1);
 
     }
     /**
@@ -130,7 +135,7 @@ class ReadTime
     /**
      * Translate output message string.
      *
-     * @param array $translation
+     * @param array<string> $translation
      * @return void
      */
 
@@ -159,22 +164,30 @@ class ReadTime
 
         if ($this->abbreviate) {
             //return x min read
-            return self::$minutes . ' ' . $this->translation['min'] . ' ' . $this->translation['read'];
+            $result = self::$minutes . ' ' . $this->translation['min'] . ' ' . $this->translation['read'];
         } else {
             //return x minute/minutes read
             $output_text = self::$minutes > 1 ? $this->translation['minutes'] : $this->translation['minute'];
-            return self::$minutes . ' ' . $output_text . ' ' . $this->translation['read'];
+            $result      = self::$minutes . ' ' . $output_text . ' ' . $this->translation['read'];
         }
+
+        if ($this->rtl) {
+            $result = implode(' ', array_reverse(explode(' ', $result)));
+
+        }
+
+        return $result;
     }
 
     /**
      * Get an array of class properties and read time data.
      *
-     * @return array containg ReadTime class data.
+     * @return array{'minutes':int, 'time':array, 'wordCount':int, 'translation':array, 'abbreviate':bool,'wordsPerMinute':int} containg ReadTime class data.
      */
 
-    public function getArray()
+    public function getArray(): array
     {
+        $this->getTime();
         return [
             'minutes'        => self::$minutes,
             'time'           => self::time(self::$text),
@@ -188,12 +201,12 @@ class ReadTime
     /**
      * Get JSON output of class properties and read time data.
      *
-     * @return JSON object of ReadTime class data.
+     * @return string JSON object of ReadTime class data.
      */
 
-    public function getJSON()
+    public function getJSON(): string
     {
-        return json_encode($this->getArray());
+        return (string) json_encode($this->getArray());
 
     }
 }
