@@ -2,7 +2,7 @@
 require_once '/var/www/html/read-time/vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
-use Waqarahmed\ReadTime\ReadTime as ReadTime;
+use Waqarahmed\ReadTime\ReadTime;
 
 final class ReadTimeTest extends TestCase
 {
