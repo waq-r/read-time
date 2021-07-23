@@ -13,6 +13,11 @@ e.g: `x min read` or `5 minutes read`.
 - Support for Array output
 - Support for JSON output
 
+## Installation
+Installation using composer
+```bash
+composer require waqarahmed/read-time
+```
 ## Usage
 ### Static Methods
 
