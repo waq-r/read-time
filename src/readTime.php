@@ -5,7 +5,7 @@ use Exception;
 
 /**
  * Class ReadTime
- * @author Waqar Ahmed <waqar.ahmed@myport.ac.uk>
+ * @author Waqar Ahmed <ahmed@waqar.org>
  */
 
 class ReadTime
@@ -171,7 +171,7 @@ class ReadTime
             $result      = self::$minutes . ' ' . $output_text . ' ' . $this->translation['read'];
         }
 
-        if ($this->rtl) {
+        if ($this->rtl === true) {
             $result = implode(' ', array_reverse(explode(' ', $result)));
 
         }
