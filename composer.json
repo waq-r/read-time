@@ -19,5 +19,5 @@
         "name": "Waqar Ahmed",
         "email": "ahmed@waqar.org"
     }],
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
