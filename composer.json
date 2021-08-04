@@ -15,6 +15,11 @@
             "Waqarahmed\\ReadTime\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [{
         "name": "Waqar Ahmed",
         "email": "ahmed@waqar.org"

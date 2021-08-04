@@ -20,7 +20,7 @@ class ReadTime
      * Number of words read in a minute.
      * @var int
      */
-    public static $wordsPerMinute;
+    public static $wordsPerMinute = 228;
 
     /**
      * Total words present in the text content.
@@ -67,14 +67,22 @@ class ReadTime
     public $rtl = false;
 
     /**
-     * The language of text, it affects on the speed of reading
+     * The language of text, reading speed of different languages vary.
      * @var string
      */
     public $language;
+    
     /**
-     * @param array<string> $translation
+     * Constructor
+     * @param string $text 
+     * @param array<string>|null $translation 
+     * @param bool|bool $abbreviate 
+     * @param bool|bool $rtl 
+     * @param string|null $language 
+     * @param int $wordsPerMinute 
+     * @return void
      */
-    public function __construct(string $text, array $translation = null, bool $abbreviate = true, bool $rtl = false, int $wordsPerMinute = 200)
+    public function __construct(string $text, array $translation = null, bool $abbreviate = true, bool $rtl = false, string $language = null, int $wordsPerMinute = 228)
     {
         self::$text = $text;
         if (isset($translation)) {
@@ -83,11 +91,16 @@ class ReadTime
         self::$wordsPerMinute = $wordsPerMinute;
         $this->abbreviate     = $abbreviate;
         $this->rtl            = $rtl;
-        self::$wordsPerMinute = $this->setTextLanguage('en');
+        if(isset($language)) {
+            $this->setTextLanguage($language);
+        }
+        else {
+            self::$wordsPerMinute = $wordsPerMinute;
+        }
     }
 
     /**
-     * Set speed of reading automatically based of the language of text
+     * Set (words per minute) reading speed of the input text language.
      *
      * The speeds are based on an article on Investigative Ophthalmology & Visual Science journal
      * https://iovs.arvojournals.org/article.aspx?articleid=2166061
@@ -96,7 +109,7 @@ class ReadTime
      * 
      * @return void
      */
-    public static function setTextLanguage(string $language='en')
+    public function setTextLanguage(string $language): void
     {
         $speed = 228;
         switch ($language) {

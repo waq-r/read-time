@@ -27,7 +27,7 @@ There are two static methods `minRead(string $text)` and`time(sting $text)`.
 Use this method for a simple `x min read` message. It returns a rounded minutes number with a `min read` message.
 
 ```php
-$text = str_repeat('ad bc ', 2020); //440 words in $text
+$text = str_repeat('ad bc ', 251); //502 words in $text
 echo ReadTime::minRead($text);
 ```
 The output:
@@ -37,7 +37,7 @@ The output:
 ### time()
 `time()` method returns an array of the number of `minutes` and `seconds` required to read the given $text.
 ```php
-$text = str_repeat('ad bc ', 2020); //440 words in $text
+$text = str_repeat('ad bc ', 251); //502 words in $text
 ReadTime::time($text);
 ```
 The output:
@@ -60,7 +60,8 @@ public function __construct(
   array $translation = null, 
   bool $abbreviate = true, 
   bool $rtl = false, 
-  int $wordsPerMinute = 200
+  string $language = null,
+  int $wordsPerMinute = 228
   )
   ```
   #### Class defaults
@@ -68,7 +69,13 @@ public function __construct(
   - `$rtl` language direction right-to-left is `false` by default
   - `$translation` default is `null` class outputs the English language by default
   - `$abbreviate` Abbreviate the word 'minute/minutes' to 'min' is `true` by default
-  
+
+
+### getTime()
+After initiating a new class object, call the `getTime()` method to get the result.
+Example:
+`4 minutes read` or `1 minute read` or abbreviated `4 min read`.
+
 ### setTextLanguge()
 Reading time of different languages vary significantly (S. Klosinski,  K. Dietz). Class method setTextLanguage() has estimated reading times of 17 languages taken from this study.
 
@@ -79,16 +86,12 @@ Arabic (ar) 138, Chinese (zh) 158, Dutch (nl) 202, English (en) 228, Finnish (fi
 
 English is the default language. Set different languages by passing two letters (ISO 639-1) language codes to the setTextLanguag() method. 
 
-An example to set Spanish language.
+An example: Setting Turkish as the input language.
  ```php
- ReadTime::setTextLanguag('es');
+ $text = str_repeat('ad bc ', 251); //502 words in $text
+ $result = new ReadTime($this->generateText(), ['minute' => 'dakika', 'minutes' => 'dakika', 'read' => 'okuman'], false, false, 'tr');
+ echo $result->getTime();
  ```
-
-
-### getTime()
-After initiating a new class object, call the `getTime()` method to get the result.
-Example:
-`4 minutes read` or `1 minute read` or abbreviated `4 min read`.
 
 ### Translation
 Pass translation array to the class to set the translations of the words: `minute`, `minutes`, `min` and `read`.
@@ -105,7 +108,7 @@ $translation = [
 ```
 #### Example translation input
 ```php
-$text = str_repeat('ad bc ', 220); //440 words in $text
+$text = str_repeat('ad bc ', 251); //502 words in $text
 $result = new ReadTime($this->generateText(), ['minute' => 'minuto', 'minutes' => 'minutos', 'read' => 'leer'], false);
 echo $result->getTime();
 ```
@@ -114,7 +117,7 @@ The Spanish translated output: `2 minutos leer`.
 #### Right-to-Left Language Translation
 Set `$rtl` property to `true` and pass `$translation` of languages written right-to-left.
 ```php
-$text = str_repeat('ad bc ', 2020);
+$text = str_repeat('ad bc ', 251);
 $result = new ReadTime($this->generateText(), ['minute' => 'دقیقه', 'minutes' => 'دقایق', 'read' => 'خواندن'], false, true);
 echo $result->getTime();
 ```
@@ -125,7 +128,7 @@ Method to get JSON output of claculated read time and class properties.
 
 A class instance with default properties outputs:
 ```php
-$text = str_repeat('hello world ', 220);
+$text = str_repeat('hello world ', 251);
 $result = new ReadTime($text);
 echo $result->getJSON();
 ```
@@ -138,7 +141,7 @@ outputs:
         "minutes": 2,
         "seconds": 12
     },
-    "wordCount": 440,
+    "wordCount": 502,
     "translation": {
         "min": "min",
         "minute": "minute",
@@ -146,7 +149,7 @@ outputs:
         "read": "read"
     },
     "abbreviate": true,
-    "wordsPerMinute": 200
+    "wordsPerMinute": 228
 }
 ```
 
@@ -154,7 +157,7 @@ outputs:
 Method to get array output of calculated read time and instance properties.
 A class instance with default properties:
 ```php
-$text = str_repeat('hello world ', 220);
+$text = str_repeat('hello world ', 251);
 $result = new ReadTime($text);
 echo $result->getArray();
 ```
@@ -171,7 +174,7 @@ array(6) {
     int(12)
   }
   ["wordCount"]=>
-  int(440)
+  int(502)
   ["translation"]=>
   array(4) {
     ["min"]=>
@@ -186,7 +189,7 @@ array(6) {
   ["abbreviate"]=>
   bool(true)
   ["wordsPerMinute"]=>
-  int(200)
+  int(228)
 }
 ```
 
