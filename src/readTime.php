@@ -83,7 +83,7 @@ class ReadTime
         self::$wordsPerMinute = $wordsPerMinute;
         $this->abbreviate     = $abbreviate;
         $this->rtl            = $rtl;
-        self::$wordsPerMinute = $this->set_text_language();
+        self::$wordsPerMinute = $this->setTextLanguage('en');
     }
 
     /**
@@ -96,7 +96,7 @@ class ReadTime
      * 
      * @return void
      */
-    public static function set_text_language(string $language='en')
+    public static function setTextLanguage(string $language='en')
     {
         $speed = 228;
         switch ($language) {
