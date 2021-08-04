@@ -75,8 +75,8 @@ final class ReadTimeTest extends TestCase
         $result = new ReadTime($this->generateText(), ['minute' => 'minuto', 'minutes' => 'minutos', 'read' => 'leer'], false);
         $this->assertSame('2 minutos leer', $result->getTime());
 
-        $result = new ReadTime($this->generateText(), ['minute' => 'دقیقه', 'minutes' => 'دقایق', 'read' => 'خواندن'], false, true);
-        $this->assertSame('خواندن دقایق 2', $result->getTime());
+        $result = new ReadTime($this->generateText(), ['minute' => 'دقیقه', 'minutes' => 'دقیقه', 'read' => 'خواندن'], false, true);
+        $this->assertSame('خواندن دقیقه 2', $result->getTime());
 
     }
 
