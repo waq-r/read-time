@@ -68,11 +68,23 @@ public function __construct(
   - `$rtl` language direction right-to-left is `false` by default
   - `$translation` default is `null` class outputs the English language by default
   - `$abbreviate` Abbreviate the word 'minute/minutes' to 'min' is `true` by default
-### setTextLanguge('en')
-After initaating with using this method, it's possible to set the speed of reading
-based of the language of text.
-The parameter is two character string that according of ISO 639-1 represents a language
-and now there are the information of 17 languages like: ar, es, fr, zh, en and etc.
+  
+### setTextLanguge()
+Reading time of different languages vary significantly (S. Klosinski,  K. Dietz). Class method setTextLanguage() has estimated reading times of 17 languages taken from this study.
+
+Reference: "Standardized Assessment of Reading Performance: The New International Reading Speed Texts IReST"
+
+#### Language (iso-code) Words-per-minutes
+Arabic (ar) 138, Chinese (zh) 158, Dutch (nl) 202, English (en) 228, Finnish (fi) 161, French (fr) 195, German (el) 179, Hebrew (he) 187, Italian (it) 188, Japanese (jp) 193, Polish (pl) 166, Portoguese (pt) 181, Russian (ru) 184, Slovenian (sl) 180, Spanish (es) 218, Swedish (sv) 199, Turkish (tr) 166.
+
+English is the default language. Set different languages by passing two letters (ISO 639-1) language codes to the setTextLanguag() method. 
+
+An example to set Spanish language.
+ ```php
+ ReadTime::setTextLanguag('es');
+ ```
+
+
 ### getTime()
 After initiating a new class object, call the `getTime()` method to get the result.
 Example:
