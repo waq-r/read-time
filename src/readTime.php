@@ -20,7 +20,7 @@ class ReadTime
      * Number of words read in a minute.
      * @var int
      */
-    public static $wordsPerMinute = 200;
+    public static $wordsPerMinute;
 
     /**
      * Total words present in the text content.
@@ -67,6 +67,11 @@ class ReadTime
     public $rtl = false;
 
     /**
+     * The language of text, it affects on the speed of reading
+     * @var string
+     */
+    public $language;
+    /**
      * @param array<string> $translation
      */
     public function __construct(string $text, array $translation = null, bool $abbreviate = true, bool $rtl = false, int $wordsPerMinute = 200)
@@ -78,6 +83,80 @@ class ReadTime
         self::$wordsPerMinute = $wordsPerMinute;
         $this->abbreviate     = $abbreviate;
         $this->rtl            = $rtl;
+        self::$wordsPerMinute = $this->set_text_language();
+    }
+
+    /**
+     * Set speed of reading automatically based of the language of text
+     *
+     * The speeds are based on an article on Investigative Ophthalmology & Visual Science journal
+     * https://iovs.arvojournals.org/article.aspx?articleid=2166061
+     * 
+     * Language Codes according to ISO 639-1
+     * 
+     * @return void
+     */
+    public static function set_text_language(string $language='en')
+    {
+        $speed = 228;
+        switch ($language) {
+            case "ar":
+              $speed = 138;
+              break;
+            case "zh":
+                $speed = 158;
+              break;
+            case "nl":
+              $speed = 202;
+              break;
+            case "en":
+                $speed = 228;
+              break;
+            case "fi":
+              $speed = 161;
+              break;
+            case "fr":
+                $speed = 195;
+              break;
+            case "el":
+              $speed = 179;
+              break;
+            case "he":
+                $speed = 187;
+              break;
+            case "it":
+              $speed = 188;
+              break;
+            case "ja":
+                $speed = 193;
+              break;
+            case "pl":
+              $speed = 166;
+              break;
+            case "pt":
+                $speed = 181;
+              break;
+            case "ru":
+                $speed = 184;
+              break;
+            case "sl":
+              $speed = 180;
+              break;
+            case "es":
+                $speed = 218;
+              break;
+            case "sv":
+              $speed = 199;
+              break;
+            case "tr":
+                $speed = 166;
+              break;
+            
+            default:
+                //Default is English
+                $speed = 228;
+          }
+          self::$wordsPerMinute = $speed;
     }
 
     /**
@@ -88,7 +167,7 @@ class ReadTime
     protected static function wordCount(): int
     {
         $text            = strip_tags(self::$text);
-        self::$wordCount = (int) preg_match_all('/\s+/', $text, $matches);
+        self::$wordCount = (int) preg_match_all('/\s+/u', $text, $matches);
         return self::$wordCount;
     }
     /**

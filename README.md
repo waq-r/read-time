@@ -68,7 +68,11 @@ public function __construct(
   - `$rtl` language direction right-to-left is `false` by default
   - `$translation` default is `null` class outputs the English language by default
   - `$abbreviate` Abbreviate the word 'minute/minutes' to 'min' is `true` by default
-
+### set_text_languge('en)
+After initaating with using this method, it's possible to set the speed of reading
+based of the language of text.
+The parameter is two character string that according of ISO 639-1 represents a language
+and now there are the information of 17 languages like: ar, es, fr, zh, en and etc.
 ### getTime()
 After initiating a new class object, call the `getTime()` method to get the result.
 Example:
